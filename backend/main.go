@@ -12,9 +12,8 @@ import (
 var db *sql.DB
 
 func main() {
-	// اتصال به دیتابیس (اطلاعات خودتو جایگزین کن)
 	var err error
-	dsn := "root:@tcp(127.0.0.1:3306)/vpn_db"
+	dsn := "root:@tcp(127.0.0.1:3306)/chita"
 	db, err = sql.Open("mysql", dsn)
 	if err != nil {
 		log.Fatal(err)
