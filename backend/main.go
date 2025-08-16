@@ -1,36 +1,23 @@
 package main
 
 import (
-	"database/sql"
+	"backend/database"
+	"backend/handlers"
 	"log"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/go-sql-driver/mysql"
 )
 
-var db *sql.DB
-
 func main() {
-	var err error
-	dsn := "root:@tcp(127.0.0.1:3306)/chita"
-	db, err = sql.Open("mysql", dsn)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	// تست اتصال دیتابیس
-	err = db.Ping()
-	if err != nil {
-		log.Fatal(err)
+	// اتصال به دیتابیس
+	if err := database.Connect(); err != nil {
+		log.Fatal("خطا در اتصال به دیتابیس:", err)
 	}
 
-	router := gin.Default()
+	r := gin.Default()
 
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"message": "pong"})
-	})
+	// مسیر تعرفه‌ها
+	r.GET("/plans", handlers.GetPlans)
 
-	router.Run(":8080")
+	r.Run(":8080")
 }
